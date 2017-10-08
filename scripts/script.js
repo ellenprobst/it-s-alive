@@ -36,7 +36,7 @@ function init() {
 
 	//load mesh
   var loader = new THREE.JSONLoader(); 
-  loader.load('../blender/skull.json', generateMesh );
+  loader.load('https://raw.githubusercontent.com/ellenprobst/it-s-alive/master/blender/skulleyes.json', generateMesh );
 
 	window.addEventListener( 'resize', onWindowResize, false );
  
