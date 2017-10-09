@@ -2,7 +2,7 @@ var renderer, scene, camera, group;
 var mouseX = 0;
 var mouseY= 0;
 
-var skull, leftEye, rightEye;
+var skull, leftEye, rightEye, light1, light2, light3, light4;
    
 init();
 animate();  
@@ -45,6 +45,21 @@ function init() {
 		//  var sphereSize = 1;
 		//  var pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
 		//  scene.add( pointLightHelper );
+		var sphere = new THREE.SphereGeometry( 0.1, 16, 8 );
+	light1 = new THREE.PointLight( 0xff0040, .8, 10 );
+	light1.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xff0040 } ) ) );
+	scene.add( light1 );
+	light2 = new THREE.PointLight( 0x0040ff, .8, 10 );
+	light2.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0040ff } ) ) );
+	scene.add( light2 );
+	light3 = new THREE.PointLight( 0x80ff80, .8, 10 );
+	light3.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x80ff80 } ) ) );
+	scene.add( light3 );
+	light4 = new THREE.PointLight( 0x80ff80, .8, 10 );
+	light4.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x80ff80 } ) ) );
+	scene.add( light4 );
+	
+
 
 	// grid
 	var size = 100;
@@ -57,8 +72,6 @@ function init() {
   	loader.load('https://raw.githubusercontent.com/ellenprobst/it-s-alive/master/blender/skull.json', generateMesh );
   	loader.load('https://raw.githubusercontent.com/ellenprobst/it-s-alive/master/blender/eyes.json', generateLeftEye );
   	loader.load('https://raw.githubusercontent.com/ellenprobst/it-s-alive/master/blender/eyes.json', generateRightEye );
-
-
   	
 	window.addEventListener( 'resize', onWindowResize, false );
   
@@ -136,16 +149,31 @@ function animate(event) {
 	requestAnimationFrame( animate );
 
 	if (scene) {
-		scene.rotation.y = mouseX * .1;
-		scene.rotation.x = mouseY * -.1;
+		scene.rotation.y = mouseX * .15;
+		scene.rotation.x = mouseY * -.15;
 	}
 
-	if (leftEye) {
+	if (rightEye) {
 		leftEye.rotation.y = rightEye.rotation.y = mouseX * .50;
 		leftEye.rotation.x = rightEye.rotation.x = mouseY * -.50;
 	} 
 
-
+	var time = Date.now() * 0.0008;
+	
+				light1.position.x = Math.sin( time * 0.7 ) * 20;
+				light1.position.y = Math.cos( time * 0.5 ) * 20;
+				light1.position.z = Math.cos( time * 0.3 ) * 10;
+				light2.position.x = Math.cos( time * 0.3 ) * 20;
+				light2.position.y = Math.sin( time * 0.5 ) * 20;
+				light2.position.z = Math.sin( time * 0.7 ) * 10;
+				light3.position.x = Math.sin( time * 0.7 ) * 20;
+				light3.position.y = Math.cos( time * 0.3 ) * 20;
+				light3.position.z = Math.sin( time * 0.5 ) * 10;
+				light4.position.x = Math.sin( time * 0.5 ) * 20;
+				light4.position.y = Math.cos( time * 0.3 ) * 20;
+				light4.position.z = Math.sin( time * 0.7 ) * 10;
+				
 	render();
 }; 
  
+// to do: remove shininess, add group for skull, change light colors
