@@ -2,7 +2,7 @@ var renderer, scene, camera, group;
 var mouseX = 0;
 var mouseY= 0;
 
-var skull, eye;
+var skull, leftEye, rightEye;
    
 init();
 animate();  
@@ -21,60 +21,51 @@ function init() {
 	camera.position.set(0, 0, 60);
 	camera.zoom = 2;
 	camera.updateProjectionMatrix();
-
-	//camera.rotation.set(-14.56,-85.02,-14.50);
-
-       
-            
+        
 	// scene
 	scene = new THREE.Scene();
 	scene.updateMatrixWorld();
 
-
-	var light = new THREE.SpotLight( 16726440, 1 );
-	light.distance = 0;
-	light.angle = 0.314159;
+	// lights
+	var light = new THREE.SpotLight( 16726440, .5 );
+	light.angle = 0.50;
 	light.decay = 1;
-	light.position.set( -17.56, -21.69, 55.41 );
+	light.position.set( -50.56, -21.69, 50.41 );
 	scene.add( light );
-	console.log(light)
-	// var sphereSize = 10;
-	// var spotLightHelper = new THREE.SpotLightHelper( light, sphereSize );
-	// scene.add( spotLightHelper );
+	
+		 var sphereSize = 10;
+		 var spotLightHelper = new THREE.SpotLightHelper( light, sphereSize );
+		 //scene.add( spotLightHelper );
 
 	var pointLight = new THREE.PointLight( 216285, 3.1 );
-	pointLight.distance = 0;
 	pointLight.decay = 1;
-	pointLight.position.set( -2.37, -16.15, 15.48 );
+	pointLight.position.set( -2.37, -18.15, 20.48 );
 	scene.add( pointLight );
-	console.log(pointLight);
-	 var sphereSize = 1;
-	 var pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
-	 scene.add( pointLightHelper );
+	
+		//  var sphereSize = 1;
+		//  var pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
+		//  scene.add( pointLightHelper );
 
+	// grid
 	var size = 100;
 	var divisions = 10;
-
 	var gridHelper = new THREE.GridHelper( size, divisions );
-	scene.add( gridHelper );
+	//scene.add( gridHelper );
 
 	//load mesh
   	var loader = new THREE.JSONLoader(); 
   	loader.load('https://raw.githubusercontent.com/ellenprobst/it-s-alive/master/blender/skull.json', generateMesh );
+  	loader.load('https://raw.githubusercontent.com/ellenprobst/it-s-alive/master/blender/eyes.json', generateLeftEye );
+  	loader.load('https://raw.githubusercontent.com/ellenprobst/it-s-alive/master/blender/eyes.json', generateRightEye );
 
-  	var loader = new THREE.JSONLoader(); 
-  	loader.load('https://raw.githubusercontent.com/ellenprobst/it-s-alive/master/blender/eyes.json', generateEyes );
 
+  	
 	window.addEventListener( 'resize', onWindowResize, false );
- 
-  //plane(); 
   
 };
 
 
-
-
-// load skull 
+// generate skull 
 function generateMesh(geometry, material){
 	geometry.computeVertexNormals();
 
@@ -84,15 +75,35 @@ function generateMesh(geometry, material){
 	scene.add( skull );
 }; 
 
-// load skull 
-function generateEyes(geometry, material){
+
+// generate eye 
+function generateLeftEye(geometry, material){
 	geometry.computeVertexNormals();
+	geometry.center();
+	
+	leftEye = new THREE.Mesh(geometry, material);
+	leftEye.scale.y = leftEye.scale.z = leftEye.scale.x = 8;
+	leftEye.position.set(-4.5,1.7,4.3);
 
-	eye = new THREE.Mesh(geometry, material);
-	eye.scale.y = eye.scale.z = eye.scale.x = 8;
-	eye.position.set(-.2,-0.22,12);
+	// var box = new THREE.BoxHelper( eye, 0xffff00 );
+	// scene.add( box );
 
-	scene.add( eye );
+	scene.add( leftEye );
+};
+
+// generate eye 
+function generateRightEye(geometry, material){
+	geometry.computeVertexNormals();
+	geometry.center();
+	
+	rightEye = new THREE.Mesh(geometry, material);
+	rightEye.scale.y = rightEye.scale.z = rightEye.scale.x = 8;
+	rightEye.position.set(0,1.7,4.3);
+
+	// var box = new THREE.BoxHelper( eye, 0xffff00 );
+	// scene.add( box );
+
+	scene.add( rightEye );
 }; 
 
 
@@ -101,6 +112,8 @@ document.addEventListener('mousemove', onMouseMove, false);
 // Follows the mouse event
 function onMouseMove(event) {
   event.preventDefault();
+
+  cursorX = event.clientX;
   mouseX = (event.clientX / window.innerWidth) * 2 - 1;
   mouseY = - (event.clientY / window.innerHeight) * 2 + 1;
 };
@@ -118,11 +131,20 @@ function render() {
 };
 
 // animate
-function animate() {
+function animate(event) {
 	
 	requestAnimationFrame( animate );
-	scene ? scene.rotation.y = mouseX * 1.5 : null;
-	scene ? scene.rotation.x = mouseY * 1.5 : null;
+
+	if (scene) {
+		scene.rotation.y = mouseX * .1;
+		scene.rotation.x = mouseY * -.1;
+	}
+
+	if (leftEye) {
+		leftEye.rotation.y = rightEye.rotation.y = mouseX * .50;
+		leftEye.rotation.x = rightEye.rotation.x = mouseY * -.50;
+	} 
+
 
 	render();
 }; 
