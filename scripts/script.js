@@ -90,7 +90,7 @@ function generateEyes(geometry, material){
 
 	eye = new THREE.Mesh(geometry, material);
 	eye.scale.y = eye.scale.z = eye.scale.x = 8;
-	eye.position.set(-.2,-0.22,0.12);
+	eye.position.set(-.2,-0.22,12);
 
 	scene.add( eye );
 }; 
