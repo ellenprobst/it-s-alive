@@ -19,6 +19,9 @@ function init() {
 	// camera
 	camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .1, 10000);
 	camera.position.set(0, 0, 60);
+	camera.zoom = 2;
+	camera.updateProjectionMatrix();
+
 	//camera.rotation.set(-14.56,-85.02,-14.50);
 
        
@@ -34,7 +37,7 @@ function init() {
 	light.decay = 1;
 	light.position.set( -17.56, -21.69, 55.41 );
 	scene.add( light );
-	
+	console.log(light)
 	// var sphereSize = 10;
 	// var spotLightHelper = new THREE.SpotLightHelper( light, sphereSize );
 	// scene.add( spotLightHelper );
@@ -44,16 +47,16 @@ function init() {
 	pointLight.decay = 1;
 	pointLight.position.set( -2.37, -16.15, 15.48 );
 	scene.add( pointLight );
-
+	console.log(pointLight);
 	 var sphereSize = 1;
 	 var pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
 	 scene.add( pointLightHelper );
 
-	 var size = 100;
-var divisions = 10;
+	var size = 100;
+	var divisions = 10;
 
-var gridHelper = new THREE.GridHelper( size, divisions );
-scene.add( gridHelper );
+	var gridHelper = new THREE.GridHelper( size, divisions );
+	scene.add( gridHelper );
 
 	//load mesh
   	var loader = new THREE.JSONLoader(); 
@@ -87,7 +90,7 @@ function generateEyes(geometry, material){
 
 	eye = new THREE.Mesh(geometry, material);
 	eye.scale.y = eye.scale.z = eye.scale.x = 8;
-	eye.position.set(-4.46,-0.22,0.12);
+	eye.position.set(-.2,-0.22,0.12);
 
 	scene.add( eye );
 }; 

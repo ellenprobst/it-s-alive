@@ -32,7 +32,7 @@
         "colorSpecular":[0.5,0.5,0.5],
         "opacity":1,
         "specularCoef":50,
-        "depthTest":true
+        "depthTest":false
     },{
         "transparent":false,
         "visible":true,
@@ -66,7 +66,7 @@
         "colorSpecular":[0.12729,0.129091,0.0773081],
         "opacity":1,
         "specularCoef":50,
-        "depthTest":true
+        "depthTest":false
     },{
         "transparent":false,
         "visible":true,
